@@ -7,4 +7,17 @@ class GameController extends RestfulController {
     GameController() {
         super(Game)
     }
+
+    def search(String q, Integer max ) {
+        if (q) {
+            def query = Game.where {
+                title ==~ "%${q}%"
+            }
+            respond query.list(max: Math.min( max ?: 10, 100))
+        }
+        else {
+            respond([])
+        }
+    }
+
 }

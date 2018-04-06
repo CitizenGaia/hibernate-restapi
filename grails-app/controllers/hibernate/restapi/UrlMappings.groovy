@@ -13,5 +13,17 @@ class UrlMappings {
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
         "404"(view: '/notFound')
+
+        "/api/users"(resources:"user")
+        "/api/games"(resources:"game")
+
+        "/api/games"(resources:"game") {
+            collection {
+                '/search'(controller: 'game', action: 'search')
+            }
+        }
+
     }
+
+
 }
