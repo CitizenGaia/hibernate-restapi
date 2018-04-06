@@ -1,4 +1,4 @@
-package hibernate.example
+package hibernate.restapi
 
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration

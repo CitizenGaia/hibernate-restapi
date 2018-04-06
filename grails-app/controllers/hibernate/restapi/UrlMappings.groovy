@@ -1,4 +1,4 @@
-package hibernate.example
+package hibernate.restapi
 
 class UrlMappings {
 
