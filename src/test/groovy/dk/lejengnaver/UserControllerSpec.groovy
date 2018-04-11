@@ -1,42 +1,43 @@
 package dk.lejengnaver
 
-import grails.plugin.json.view.mvc.JsonViewResolver
-import grails.test.hibernate.HibernateSpec
-import grails.testing.web.controllers.ControllerUnitTest
+import spock.lang.Specification
+import grails.plugins.rest.client.RestBuilder
+import grails.plugins.rest.client.RestResponse
+import grails.testing.mixin.integration.Integration
+import spock.lang.Shared
+import spock.lang.Specification
+import grails.transaction.Rollback
 
-class UserControllerSpec extends HibernateSpec implements ControllerUnitTest<UserController> {
+@Integration
+@Rollback
+class UserControllerSpec extends Specification {
 
-    static doWithSpring = {
-        jsonSmartViewResolver(JsonViewResolver)
-    }
+    @Shared
+    RestBuilder restBuilder = new RestBuilder()
 
-    void setup() {
+    def setup() {
         User.saveAll(
-                new User(username: 'Adam Ant', password: "changeme", location: "All Sins"),
-                new User(username: 'Brian Bow', password: "changeme", location: "Bell Grove"),
-                new User(username: 'Carl Colt', password: "changeme", location: "Crank River"),
-                new User(username: 'Danny Deal', password: "changeme", location: "Ocean Drive"),
+                new User(username: "Donald T", password: "changeme", location: "Tower"),
+                new User(username: "Barack O", password: "changeme", location: "Polis"),
+                new User(username: "George B Jr", password: "changeme", location: "Farm"),
+                new User(username: "Bill C", password: "changeme", location: "Polis"),
         )
     }
 
-    def cleanup() {
-    }
+   void 'test the search action finds results'() {
 
-    void 'test the create action'() {
-        when: 'A query is executed that finds results by unique username'
-        User[] users = User.findAll("from User as u where u.username=?", ['Adam Ant'])
+       when:
+       RestResponse resp = restBuilder.get("http://localhost:${serverPort}/api/users")
 
-        then: 'The response is correct'
-        users.size() == 1
-        users[0].location == 'All Sins'
-    }
+       then:
+       resp.status == 200
+/*
+       resp.json.size() == 4
+       resp.json.find { it.username == "Donald T" && it.location == 'Tower' }
+       resp.json.find { it.username == "George B Jr" &&  it.name == 'Farm' }
+       resp.json.find { it.location == "Polis" }
+*/
 
-    void 'test the search action finds results'() {
-        when: 'A query is executed that finds results by identical password'
-        User[] users = User.findAll("from User as u where u.password=?", ['changeme'])
-
-        then: 'The response is correct'
-        users.size() == 4
     }
 
 }
