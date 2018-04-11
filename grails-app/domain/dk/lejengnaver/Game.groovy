@@ -32,13 +32,15 @@ class Game {
     }
 
     static GameMarshaller = { Game domain ->
+        def dataContent = [:]
+        dataContent.putAll(domain.content)
         return [
                 id: domain.id,
                 version: domain.version,
                 title: domain.title,
                 auhor: domain.author,
                 description: domain.description,
-                cubes: (domain.content!=null ? domain.content.size() : "0"),
+                content: dataContent,
                 createdate: domain.createDate
         ]
     }
