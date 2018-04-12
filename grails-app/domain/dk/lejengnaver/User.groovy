@@ -1,9 +1,13 @@
 package dk.lejengnaver
 
 import grails.compiler.GrailsCompileStatic
+import groovy.transform.EqualsAndHashCode
 
 @GrailsCompileStatic
-class User {
+@EqualsAndHashCode(includes='username')
+class User implements Serializable {
+
+    private static final long serialVersionUID = 1
 
     String username
     String password
@@ -27,11 +31,11 @@ class User {
         return builder.toString()
     }
 
-    static PlayerMarshaller = { User domain ->
+    static UserMarshaller = { User domain ->
         return [
                 id: domain.id,
                 version: domain.version,
-                title: domain.username,
+                username: domain.username,
                 location: domain.location,
                 createDate: domain.createDate
         ]

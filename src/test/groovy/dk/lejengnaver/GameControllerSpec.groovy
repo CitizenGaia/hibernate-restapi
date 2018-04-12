@@ -7,6 +7,8 @@ import grails.testing.mixin.integration.Integration
 import grails.transaction.Rollback
 import spock.lang.Specification
 
+import java.security.SecureRandom
+
 @Integration
 @Rollback
 class GameControllerSpec extends Specification {
@@ -44,5 +46,15 @@ class GameControllerSpec extends Specification {
         resp.json.author == 'unknown'
     }
 
+    Map<String, String> createContent() {
+        Map<String, String> gameMap = new HashMap()
+        def random = new SecureRandom()
+        for (int i = 0; i < 3; i++) {
+            String key = String.valueOf(random.nextInt(80) + 1)
+            String value = String.valueOf(random.nextInt(9))
+            gameMap[key] = value
+        }
+        return gameMap
+    }
 
 }
